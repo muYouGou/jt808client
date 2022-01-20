@@ -84,6 +84,7 @@ public class TCPClient {
         this.plateNumber = plateNumber;
     }
 
+
     public interface OnNotifyListener {
         void onMessage(int type, String message);
     }
@@ -183,6 +184,13 @@ public class TCPClient {
         return stringBuffer.toString();
     }
 
+    /**
+     * 测试啊
+     */
+    public void df() {
+        ClientHandler clientHandler = new ClientHandler();
+        clientHandler.sesdff();
+    }
 
     private class ClientHandler extends ChannelInboundHandlerAdapter {
         Channel mChannel = null;
@@ -357,6 +365,22 @@ public class TCPClient {
                 //sendAuthentication(code);
             }
         }
+
+        /**
+         * 测试啊
+         */
+        public void sesdff() {
+            Location location = new Location();
+
+            Message<Location> message = new Message<>(LOCATION, SizeUtils.getObjByteSize(location), phone, flowNumber, location);
+            byte[] locationData = BitOperator.encode(message).doEncode().toArray();
+            sendPacket(Unpooled.wrappedBuffer(new byte[]{0x07E}, locationData, new byte[]{0x7E}));
+            Date sendDate = new Date();
+            String hexMessage = HexStringUtils.toHexString(locationData);
+            System.out.println(hexMessage);
+            log.info("{} 发送位置消息 >>> {}", phone, hexMessage);
+        }
+
 
         public void sendLocation() throws InterruptedException {
             Location location = new Location();
